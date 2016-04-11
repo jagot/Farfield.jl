@@ -1,5 +1,5 @@
 module Farfield
 
-# package code goes here
+include("fft_propagate.jl")
 
 end # module
