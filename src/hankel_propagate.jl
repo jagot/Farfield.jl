@@ -31,4 +31,27 @@ function hankel_propagate(U::Union{Function,AbstractArray},
     r, UU
 end
 
+function naive_hankel(U::AbstractVector,
+                      ρ::AbstractVector,
+                      p)
+    Δρ = ρ[2]-ρ[1]
+    r = linspace(0,1,length(ρ))*1.0/Δρ
+    r, 2π * map(eachindex(r)) do i
+        sum(ρ.*besselj(p, 2π*r[i]*ρ).*U)*Δρ
+    end
+end
+
+function naive_hankel_propagate(U::AbstractVector,
+                                ρ::AbstractVector,
+                                k = 1.0, z = 1.0,
+                                p = 0)
+    assert(all(ρ .>= 0))
+    r, H = naive_hankel(U, ρ, p)
+    μ = k/(2π*z)
+    UU = -im*μ*exp(im*k*z)*exp(im*k*r.^2/2z).*H
+
+    r /= μ
+    r, UU
+end
+
 export hankel_propagate
