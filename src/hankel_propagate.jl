@@ -16,8 +16,9 @@ and
 using Hankel
 using DSP
 
-# This only implements the radial transform for now
-function hankel_propagate(U::Function,
+# This only implements the radial transform for now. If U is an array,
+# it is assumed to be evaluated at the correct radial points.
+function hankel_propagate(U::Union{Function,AbstractArray},
                           ρmax::Real, N,
                           k = 1.0, z = 1.0,
                           p = 0)
